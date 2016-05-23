@@ -3,7 +3,7 @@
 let User = require('../models/user-model');
 let Job = require('../models/job-model');
 let Contact = require('../models/contacts-model');
-let auth = requier('../lib/auth');
+let auth = require('../lib/auth');
 
 module.exports = (router) => {
 

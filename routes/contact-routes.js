@@ -36,8 +36,8 @@ module.exports = (router) => {
     Contact.findById(req.params.id, (err, contact) => {
       if(err) res.send(err);
       contact.remove(() => {
-        res.send('Contact Removed')
-      })
-    })
-  })
+        res.send('Contact Removed');
+      });
+    });
+  });
 };
