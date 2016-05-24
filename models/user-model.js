@@ -15,7 +15,26 @@ let userSchema = mongoose.Schema({
   password: {
     type: String,
     required: true
-  }
+  },
+  jobs: [
+    {
+      type:mongoose.Schema.Types.ObjectId,
+      ref: 'jobs'
+    }
+  ],
+  resumes: [
+    {
+      type:mongoose.Schema.Types.ObjectId,
+      ref: 'resumes'
+    }
+  ],
+  contacts: [
+    {
+      type:mongoose.Schema.Types.ObjectId,
+      ref: 'contacts'
+    }
+  ]
+
 });
 
 userSchema.pre('save', function(next){

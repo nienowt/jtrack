@@ -11,20 +11,20 @@ module.exports = function(app) {
             userId = $window.localStorage.user = res.data.id;
             cb(null, res);
           }, (err) => {
-            cb(err)
+            cb(err);
           });
       },
       getToken() {
         return token || $window.localStorage.token;
       },
       getId() {
-        return userId || $window.localStorage.id;
+        return userId || $window.localStorage.user;
       },
       signIn(user, cb) {
         cb || function(){};
-        $http.post('/login', {}, {
+        $http.get('/login', {
           headers: {
-            authorization: 'Basic' + btoa(user.email + ':' + user.password)
+            authorization: 'Basic ' + btoa(user.email + ':' + user.password)
           }
         }).then((res) => {
           token = $window.localStorage.token = res.data.token;

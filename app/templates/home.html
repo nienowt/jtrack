@@ -1,0 +1,36 @@
+<section ng-controller="MainController as mainCtrl" ng-init="userCtrl.getUser()">
+  <md-content>
+    <nav>
+      <div id="logo"></div>
+      <div id="date"></div>
+      <ul>
+        <li>Home</li>
+        <li>Jobs</li>
+        <li>Contacts</li>
+        <li>Resumes</li>
+        <li>Calander</li>
+        <li>Events</li>
+        <li>Data</li>
+        <li>Sign Out</li>
+      </ul>
+      <div id="date"></div>
+    </nav>
+    <div id="main-page-content">
+      <section id="main-jobs">
+        Jobs
+        <div class="job-list" ng-repeat="job in userCtrl.user.jobs">
+          {{job}}
+        </div>
+        <button ng-click="showJobForm =! showJobForm">Add New Job</button>
+        <form class="NewJobForm">
+          <md-datepicker ng-model="mainCtrl.jobDate" md-placeholder="Enter date"></md-datepicker>
+        </form>
+      </section>
+      <section id="main-events">
+        <div class="event-list">
+          EVENTS
+        </div>
+      </section>
+    </div>
+  </md-content>
+</section>

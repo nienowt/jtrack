@@ -1,0 +1,10 @@
+<section>
+  <h1>JTR</h1>
+  <p>Sign In!</p>
+  <form ng-submit="userCtrl.signIn(user)">
+    <input type="text" ng-model="user.email" placeholder="email">
+    <input type="text" ng-model="user.password" placeholder="password">
+    <button type="submit" name="button">Submit</button>
+  </form>
+  <p>Don't Have An Account Yet? <a href="#/landing">SignUp</a></p>
+</section>

@@ -16,7 +16,9 @@ module.exports = (router) => {
     });
 
   router.get('/login', (req, res) => {
+      console.log(req.headers)
       let based = req.headers.authorization.split(' ')[1];
+      console.log(based)
       let authArr = new Buffer(based, 'base64').toString().split(':');
       User.findOne({email:authArr[0]}, (err, user) => {
         if(err || !user) {

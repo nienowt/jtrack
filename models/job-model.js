@@ -13,6 +13,7 @@ let jobSchema = mongoose.Schema({
   appliedAt: String,
   offer: Boolean,
   offerDetails: String,
+  interview: String,
   contact: [
     {
       type:mongoose.Schema.Types.ObjectId,
