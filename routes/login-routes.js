@@ -9,9 +9,9 @@ module.exports = (router) => {
       newUser.save((err, user) => {
         if (!user) {
           console.log(err);
-          res.send('Name Taken');
+          res.status(401).json('Name Taken');
         }
-        if(user) res.send('User created!');
+        if(user) res.send({token: user.genToken(), id: user._id});
       });
     });
 
