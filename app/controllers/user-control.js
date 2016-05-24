@@ -33,7 +33,7 @@ module.exports = (app) => {
         console.log(err, res);
         if(err) return vm.error = ErrorService(err);
         console.log(res)
-        vm.user = res;
+        vm.user = res.data;
       })
     }
   }])

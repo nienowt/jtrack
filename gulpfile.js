@@ -8,7 +8,7 @@ const webpack = require('webpack-stream');
 let paths = ['*.js', 'config/*.js', 'lib/*.js', 'models/*.js', 'routes/*.js', 'test/*.js'];
 let sources = {
   js:['./app/**/*.js'],
-  wp:['./app/**/*.js',],
+  wp:['./app/**/*.js'],
   test:['./test/unit/*.js']
 
 }

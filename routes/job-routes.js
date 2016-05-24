@@ -25,10 +25,9 @@ module.exports = (router) => {
 
   .get('/jobs/user/:id', (req, res) => {
     User.findById(req.params.id)
-    .populate({
-      path: 'jobs',
-      populate: {path: 'contacts'}
-    }).exec((err, user) => {
+    .populate('jobs')
+    .populate('contacts')
+    .exec(function(err, user) {
       if(err) res.send(err);
       res.send(user)
     });
@@ -44,6 +43,7 @@ module.exports = (router) => {
       .populate('contacts')
       .exec((err, job) => {
         if(err) res.send(err);
+        console.log(job)
         res.send(job);
       });
   })

@@ -1,0 +1,43 @@
+<section id="main-jobs">
+  Jobs
+  <div class="job-list" ng-repeat="job in userCtrl.user.jobs">
+    {{job}}
+  </div>
+  <button ng-click="showJobForm =! showJobForm">Add New Job</button>
+
+  <form class="NewJobForm">
+    <md-datepicker ng-model="jobCtrl.job.Date" md-placeholder="Enter date"></md-datepicker>
+
+    <md-input-container>
+      <label>Company</label>
+      <input ng-model="jobCtrl.job.company" name="company" value="">
+    </md-input-container>
+
+    <md-input-container>
+      <label>Position</label>
+      <input ng-model="jobCtrl.job.position" name="position" value="">
+    </md-input-container>
+
+    <md-chips
+      ng-model="jobCtrl.job.requiredSkills"
+      md-separator-keys="jobCtrl.keys"
+      placeholder="Enter Required Skills"></md-chips>
+
+    <md-chips
+      ng-model="jobCtrl.job.desiredSkills"
+      md-separator-keys="jobCtrl.keys"
+      placeholder="Enter Desired Skills"></md-chips>
+
+    <md-input-container>
+      <label>Found On</label>
+      <input ng-model="jobCtrl.job.foundThrough" name="foundThrough" value="">
+    </md-input-container>
+
+    <md-input-container>
+      <label>Applied At</label>
+      <input ng-model="jobCtrl.job.appliedAt" name="appliedAt" value="">
+    </md-input-container>
+
+    <md-button ng-click="jobCtrl.submitJob()">Submit</md-button>
+  </form>
+</section>
