@@ -1,0 +1,20 @@
+nav a {
+  display: inline-block;
+  text-decoration: none;
+  padding:2%;
+}
+
+#job-list-container, #main-events {
+  height: 300px;
+  overflow: hidden;
+  overflow-y: scroll;
+  margin:1%;
+  padding:1%;
+  border:solid gray 2px;
+}
+
+#job-list-item {
+  border: solid gray 1px;
+  border-radius: 3px;
+  padding: 2%;
+}

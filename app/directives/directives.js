@@ -4,9 +4,15 @@ module.exports = (app) => {
   app.directive('jobForm', function(){
     return {
       restrict: 'E',
-      templateUrl: './templates/job-form.html',
-      controller: 'JobController',
-      controllerAs: 'jobCtrl'
+      templateUrl: './templates/job-form.html'
+    }
+  })
+  .directive('custNav', function(){
+    return {
+      restrict: 'E',
+      templateUrl: './templates/nav.html',
+      controller: 'UserController',
+      controllerAs: 'userCtrl'
     }
   })
 }

@@ -1,43 +1,57 @@
-<section id="main-jobs">
-  Jobs
-  <div class="job-list" ng-repeat="job in userCtrl.user.jobs">
-    {{job}}
-  </div>
-  <button ng-click="showJobForm =! showJobForm">Add New Job</button>
+<section id="job-form">
 
-  <form class="NewJobForm">
-    <md-datepicker ng-model="jobCtrl.job.Date" md-placeholder="Enter date"></md-datepicker>
+  <md-button ng-click="showJobForm =! showJobForm">Add New Job</md-button>
+
+  <form class="NewJobForm" ng-show="showJobForm">
+    <md-datepicker ng-model="mainCtrl.job.Date" md-placeholder="Enter date"></md-datepicker>
 
     <md-input-container>
       <label>Company</label>
-      <input ng-model="jobCtrl.job.company" name="company" value="">
+      <input ng-model="mainCtrl.job.company" ng-change="mainCtrl.contact.company=mainCtrl.job.company" name="company" value="">
     </md-input-container>
 
     <md-input-container>
       <label>Position</label>
-      <input ng-model="jobCtrl.job.position" name="position" value="">
+      <input ng-model="mainCtrl.job.position" name="position" value="">
     </md-input-container>
 
     <md-chips
-      ng-model="jobCtrl.job.requiredSkills"
-      md-separator-keys="jobCtrl.keys"
-      placeholder="Enter Required Skills"></md-chips>
+      ng-model="mainCtrl.job.requiredSkills"
+      md-separator-keys="mainCtrl.keys"
+      placeholder="What skills did they require?"></md-chips>
 
     <md-chips
-      ng-model="jobCtrl.job.desiredSkills"
-      md-separator-keys="jobCtrl.keys"
-      placeholder="Enter Desired Skills"></md-chips>
+      ng-model="mainCtrl.job.desiredSkills"
+      md-separator-keys="mainCtrl.keys"
+      placeholder="What extra skills were they looking for?"></md-chips>
 
     <md-input-container>
-      <label>Found On</label>
-      <input ng-model="jobCtrl.job.foundThrough" name="foundThrough" value="">
+      <label>How did you find the job posting?</label>
+      <input ng-model="mainCtrl.job.foundThrough" name="foundThrough" value="">
     </md-input-container>
 
     <md-input-container>
-      <label>Applied At</label>
-      <input ng-model="jobCtrl.job.appliedAt" name="appliedAt" value="">
+      <label>Where did you submit your application?</label>
+      <input ng-model="mainCtrl.job.appliedAt" name="appliedAt" value="">
     </md-input-container>
 
-    <md-button ng-click="jobCtrl.submitJob()">Submit</md-button>
+    <h4>Contact</h4>
+
+    <md-input-container>
+      <label>Who are you interacting with?</label>
+      <input ng-model="mainCtrl.contact.name" name="name" value="">
+    </md-input-container>
+
+    <md-input-container>
+      <label>Email</label>
+      <input ng-model="mainCtrl.contact.email" name="email" value="">
+    </md-input-container>
+
+    <md-input-container>
+      <label>Phone Number</label>
+      <input ng-model="mainCtrl.contact.phone" name="phone" value="">
+    </md-input-container>
+
+    <md-button ng-click="mainCtrl.submitJob()">Submit</md-button>
   </form>
 </section>

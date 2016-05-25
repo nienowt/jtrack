@@ -2,7 +2,7 @@
 
 const gulp = require('gulp');
 const webpack = require('webpack-stream');
-// const sass = require('gulp-sass');
+const sass = require('gulp-sass');
 
 
 let paths = ['*.js', 'config/*.js', 'lib/*.js', 'models/*.js', 'routes/*.js', 'test/*.js'];
@@ -81,12 +81,12 @@ gulp.task('bundle', function(){
   .pipe(gulp.dest('./build'));
 });
 
-// gulp.task('sass', function () {
-//   return gulp.src('./style/sass/*.scss')
-//     .pipe(sass().on('error', sass.logError))
-//     .pipe(gulp.dest('./style'));
-// });
-gulp.task('build', ['build:html', 'build:templates', 'bundle'])
+gulp.task('sass', function () {
+  return gulp.src('./style/sass/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('./build/style'));
+});
+gulp.task('build', ['build:html', 'build:templates', 'bundle', 'sass'])
 // gulp.task('build', ['build:html', 'build:templates', 'bundle', 'build:css'])
 //
 // gulp.task('default', ['lint', 'mocha']);

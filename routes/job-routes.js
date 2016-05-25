@@ -8,7 +8,7 @@ let auth = require('../lib/auth');
 module.exports = (router) => {
 
   router.post('/jobs/user/:id', (req,res) => {
-    console.log('post jobs hit');
+    let data = {};
     let newJob = new Job(req.body.job);
     let newContact = new Contact(req.body.contact);
     newContact.save((err, contact) => {
@@ -17,9 +17,15 @@ module.exports = (router) => {
     newJob.save((err, job) => {
       if (err) res.send(err);
     })
+    Job.findByIdAndUpdate(newJob._id, {$push: {'contact': newContact._id}},{new: true}, (err, job) => {
+        if(err) res.send(err);
+        data.job = job;
+    });
+
     User.findByIdAndUpdate(req.params.id, {$push: {'contacts': newContact._id, 'jobs': newJob._id}},{new: true}, (err, user) => {
         if(err) res.send(err);
-        res.send(user)
+        data.user = user;
+        res.send(data)
     });
   })
 

@@ -12,7 +12,8 @@ require('./services/auth-service')(app);
 require('./services/error-service')(app);
 require('./services/user-service')(app);
 require('./controllers/user-control')(app);
-require('./controllers/job-control')(app);
+// require('./controllers/job-control')(app);
+require('./controllers/main-control')(app);
 require('./directives/directives')(app);
 
 app.config(['$routeProvider', function($routeProvider){
@@ -28,7 +29,7 @@ app.config(['$routeProvider', function($routeProvider){
   })
   .when('/home', {
     templateUrl: './templates/home.html',
-    controller: 'UserController',
-    controllerAs: 'userCtrl'
+    controller: 'MainController',
+    controllerAs: 'mainCtrl'
   })
 }]);

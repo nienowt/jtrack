@@ -36,7 +36,8 @@ module.exports = function(app) {
       },
       signOut(cb) {
         token = null;
-        $window.localStorage = '';
+        console.log('yo')
+        $window.localStorage.clear();
         if(cb) cb()
       }
     }

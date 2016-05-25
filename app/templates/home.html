@@ -1,62 +1,35 @@
-<section ng-init="userCtrl.getUser()">
+<section>
   <md-content>
-    <nav>
-      <div id="logo"></div>
-      <div id="date"></div>
-      <ul>
-        <li>Home</li>
-        <li>Jobs</li>
-        <li>Contacts</li>
-        <li>Resumes</li>
-        <li>Calander</li>
-        <li>Events</li>
-        <li>Data</li>
-        <li>Sign Out</li>
-      </ul>
-      <div id="date"></div>
-    </nav>
 
-    <div id="main-page-content">
-      <job-form></job-form>
-      <!-- <section id="main-jobs">
-        Jobs
-        <div class="job-list" ng-repeat="job in userCtrl.user.jobs">
-          {{job}}
-        </div>
-        <button ng-click="showJobForm =! showJobForm">Add New Job</button>
-        <form class="NewJobForm">
-          <md-datepicker ng-model="jobCtrl.job.Date" md-placeholder="Enter date"></md-datepicker>
-          <md-input-container>
-            <label>Company</label>
-            <input ng-model="jobCtrl.job.company" name="company" value="">
-          </md-input-container>
-          <md-input-container>
-            <label>Position</label>
-            <input ng-model="jobCtrl.job.position" name="position" value="">
-          </md-input-container>
-          <md-chips ng-model="jobCtrl.job.requiredSkills" placeholder="Enter Skills"></md-chips>
-          <md-input-container>
-            <label>Desired Skills</label>
-            <input ng-model="jobCtrl.job.desiredSkills" name="desiredSkills" value="">
-          </md-input-container>
-          <md-input-container>
-            <label>Found On</label>
-            <input ng-model="jobCtrl.job.foundThrough" name="foundThrough" value="">
-          </md-input-container>
-          <md-input-container>
-            <label>Applied At</label>
-            <input ng-model="jobCtrl.job.appliedAt" name="appliedAt" value="">
-          </md-input-container>
-        </form>
-      </section> -->
-
-      <section id="main-events">
-        <div class="event-list">
-          EVENTS
-        </div>
-      </section>
-
+    <div flex layout="column" layout-gt-xs="row" id="main-page-content">
+      <md-sidenav md-is-locked-open="true">
+        <h3>Jobs</h3>
+          <div  id="job-list-container">
+            <div  id="job-list-item" ng-click="mainCtrl.selectJob(job)" ng-repeat="job in mainCtrl.jobs | orderBy:'-'">
+              {{job.position}} at {{job.company}} Applied:{{job.date.substr(0,9)}}
+            </div>
+          </div>
+          <job-form></job-form>
+      </md-sidenav>
+      <md-content flex>
+        <h3>Selected Job</h3>
+        <h4>{{mainCtrl.selected.company}}</h4>
+        <p>Position: {{mainCtrl.selected.position}}</p>
+        <p>Contact</p>
+        <p>Name: {{mainCtrl.selected.contact}}</p>
+      </md-content>
     </div>
+
+    <div layout="row">
+      <md-sidenav md-is-locked-open="true" flex>
+        <h3>EVENTS</h3>
+        <section id="main-events">
+          <div class="event-list">
+          </div>
+        </section>
+      </md-sidenav>
+      <md-content></md-content>
+  </div>
 
   </md-content>
 </section>

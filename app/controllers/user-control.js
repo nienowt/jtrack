@@ -3,7 +3,7 @@ module.exports = (app) => {
 
     const vm = this;
     vm.error = ErrorService();
-    vm.user;
+    // vm.user;
 
     vm.signUp = function(user){
       AuthService.newUser(user, (err, res) => {
@@ -24,17 +24,17 @@ module.exports = (app) => {
     };
 
     vm.signOut = function(){
-      AuthService.logout();
+      AuthService.signOut();
       $location.path('/');
     };
 
-    vm.getUser = function(){
-      UserService.getUser(AuthService.getId(), (err, res) => {
-        console.log(err, res);
-        if(err) return vm.error = ErrorService(err);
-        console.log(res)
-        vm.user = res.data;
-      })
-    }
+    // vm.getUser = function(){
+    //   UserService.getUser(AuthService.getId(), (err, res) => {
+    //     console.log(err, res);
+    //     if(err) return vm.error = ErrorService(err);
+    //     console.log(res)
+    //     vm.user = res.data;
+    //   })
+    // }
   }])
 }
