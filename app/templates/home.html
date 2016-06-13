@@ -1,4 +1,5 @@
 <section>
+  <cust-nav></cust-nav>
   <md-content>
 
     <div flex layout="column" layout-gt-xs="row" id="main-page-content">
@@ -11,12 +12,28 @@
           </div>
           <job-form></job-form>
       </md-sidenav>
-      <md-content flex>
+      <md-content flex ng-show="!edit">
         <h3>Selected Job</h3>
         <h4>{{mainCtrl.selected.company}}</h4>
         <p>Position: {{mainCtrl.selected.position}}</p>
+        <p>Applied On: {{mainCtrl.selected.date.substr(0,9)}}</p>
         <p>Contact</p>
-        <p>Name: {{mainCtrl.selected.contact}}</p>
+        <p>Name: {{mainCtrl.selected.contact[0].name}}</p>
+        <p>Email: {{mainCtrl.selected.contact[0].email}}</p>
+        <p>Phone: {{mainCtrl.selected.contact[0].phone}}</p>
+        <button ng-click="edit=!edit">Edit</button>
+      </md-content>
+      <md-content flex ng-show="edit">
+        <h3>Selected Job</h3>
+        <h4>{{mainCtrl.selected.company}}</h4>
+        <p>Position: <input ng-model="mainCtrl.editJob.position" placeholder="{{mainCtrl.selected.position}}"></input></p>
+        <p>Applied On: {{mainCtrl.selected.date.substr(0,9)}}</p>
+        <p>Contact</p>
+        <p>Name: <input ng-model="mainCtrl.editCont.name" placeholder="{{mainCtrl.selected.contact[0].name}}"</input></p>
+        <p>Email: <input ng-model="mainCtrl.editCont.email" placeholder="{{mainCtrl.selected.contact[0].email}}"</input></p>
+        <p>Phone: <input ng-model="mainCtrl.editCont.phone" placeholder="{{mainCtrl.selected.contact[0].phone}}"</input></p>
+        <button ng-click="edit=!edit; mainCtrl.submitEdit()">Submit</button>
+        <button ng-click="edit=!edit; mainCtrl.cancelEdit()">Cancel</button>
       </md-content>
     </div>
 

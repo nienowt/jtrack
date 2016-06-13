@@ -7,6 +7,8 @@ module.exports = (app) => {
     vm.jobs;
     vm.events; //add events
     vm.keys = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA];
+    vm.editJob = {};
+    vm.editCont = {};
 
     vm.resetJob = function(){
       return {
@@ -57,6 +59,19 @@ module.exports = (app) => {
 
     vm.selectJob = function(job){
       vm.selected = job;
+    }
+
+    vm.cancelEdit = function(){
+      vm.editJob = {};
+      vm.editCont = {};
+    }
+
+    vm.submitEdit = function(){
+      $http.put('/jobs/' + vm.selected._id, {job: vm.editJob, contact: vm.editCont})
+      .then((res) => {
+        vm.selected = vm.jobs[vm.jobs.indexOf(vm.selected)] = res.data.job
+        vm.selected.contact[0] = vm.jobs[vm.jobs.indexOf(vm.selected)].contact[0] = res.data.contact
+      })
     }
 
     vm.getUser();

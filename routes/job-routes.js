@@ -31,7 +31,7 @@ module.exports = (router) => {
 
   .get('/jobs/user/:id', (req, res) => {
     User.findById(req.params.id)
-    .populate('jobs')
+    .populate({path:'jobs', populate:{path:'contact'}})
     .populate('contacts')
     .exec(function(err, user) {
       if(err) res.send(err);
@@ -57,10 +57,10 @@ module.exports = (router) => {
   .put('/jobs/:id', (req, res) => {
     Job.findByIdAndUpdate(req.params.id, req.body.job, {new: true}, (err, job) => {
       if(err) res.send(err);
-      Contact.findByIdAndUpdate(job.contact, req.body.contact, {new:true}, (err, contact) => {
+      Contact.findByIdAndUpdate(job.contact[0], req.body.contact, {new:true}, (err, contact) => {
         if(err) res.send(err);
+        res.send({job: job, contact: contact})
       });
-      res.send(job)
     });
   })
 
