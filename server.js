@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 require('./routes/login-routes')(router);
 require('./routes/job-routes')(router);
 require('./routes/contact-routes')(router);
+require('./routes/event-routes')(router);
 
 app.use('/', router)
 

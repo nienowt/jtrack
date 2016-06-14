@@ -1,0 +1,10 @@
+<section id="evt-form" ng-show="mainCtrl.evShow">
+  <h3>{{mainCtrl.newEvent.type}}</h3>
+  <p>Name<input ng-model="mainCtrl.newEvent.name"></p>
+  <p ng-show="mainCtrl.newEvent.type != 'Offer'">Event Date<input ng-model="mainCtrl.newEvent.date" type="date"></p>
+  <p ng-show="mainCtrl.newEvent.type == 'Offer'">Deadline<input ng-model="mainCtrl.newEvent.date" type="date"></p>
+  <p ng-show="mainCtrl.newEvent.type != 'Offer'">Location<input ng-model="mainCtrl.newEvent.location" value=""></p>
+  <p>Details<textarea ng-model="mainCtrl.newEvent.details" rows="8" cols="40"></textarea>
+  <button ng-click="mainCtrl.addJobEvent()">Submit</button>
+  <a href='' ng-click="mainCtrl.cancelEvent()">Cancel</a>
+</section>

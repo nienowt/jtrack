@@ -33,6 +33,7 @@ module.exports = (router) => {
     User.findById(req.params.id)
     .populate({path:'jobs', populate:{path:'contact'}})
     .populate('contacts')
+    .populate('events')
     .exec(function(err, user) {
       if(err) res.send(err);
       res.send(user)

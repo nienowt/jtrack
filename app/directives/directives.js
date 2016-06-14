@@ -15,4 +15,10 @@ module.exports = (app) => {
       controllerAs: 'userCtrl'
     }
   })
+  .directive('eventForm', function(){
+    return {
+      restrict: 'E',
+      templateUrl: './templates/event.html'
+    }
+  })
 }

@@ -16,6 +16,12 @@ let userSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  events: [
+    {
+      type:mongoose.Schema.Types.ObjectId,
+      ref: 'events'
+    }
+  ],
   jobs: [
     {
       type:mongoose.Schema.Types.ObjectId,

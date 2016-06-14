@@ -4,12 +4,17 @@ module.exports = (app) => {
   app.controller('MainController', ['$http','$location','$window','$mdConstant','AuthService','UserService', function($http,$location,$window,$mdConstant,AuthService,UserService){
     const vm = this;
     vm.selected = null;
-    vm.jobs;
-    vm.events; //add events
+    vm.responseShow = false; //visibility of 'manage application status'
+    vm.evShow = false; //visibility of event form
+    vm.activeJobs;
+    vm.events = [];
     vm.keys = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA];
     vm.editJob = {};
     vm.editCont = {};
+    vm.newEvent;
 
+
+    //-----Jobs----// (maybe split into seperate controllers later)
     vm.resetJob = function(){
       return {
         date: new Date(),
@@ -17,7 +22,7 @@ module.exports = (app) => {
         position: '',
         requiredSkills: [],
         desiredSkills: [],
-        foundOn: '',
+        foundThrough: '',
         appliedAt: ''
       }
     }
@@ -39,9 +44,9 @@ module.exports = (app) => {
     vm.submitJob = function(){
       $http.post('/jobs/user/' + AuthService.getId(), {job: vm.job, contact: vm.contact})
         .then((res) => {
-          console.log(res.data)
-          vm.jobs.push(res.data.job)
-          vm.selected = vm.jobs[vm.jobs.length-1]
+          console.log(res.data);
+          vm.activeJobs.push(res.data.job);
+          vm.selected = vm.activeJobs[vm.activeJobs.length-1];
         })
         vm.job = vm.resetJob();
         vm.contact = vm.resetCont();
@@ -51,14 +56,18 @@ module.exports = (app) => {
       UserService.getUser(AuthService.getId(), (err, res) => {
         if(err) return vm.error = ErrorService(err);
         console.log(res)
-        vm.user = res.data;
-        vm.jobs = res.data.jobs;
-        vm.selected = vm.jobs[vm.jobs.length-1]
+        vm.user = res.data; // not sure this is used anywhere
+        vm.events = res.data.events;
+        vm.activeJobs = res.data.jobs.filter((j) => {
+          return j.interest !== 'No';
+        });
+        vm.selected = vm.activeJobs[vm.activeJobs.length-1]
       });
     };
 
     vm.selectJob = function(job){
       vm.selected = job;
+      vm.responseShow = false;
     }
 
     vm.cancelEdit = function(){
@@ -69,10 +78,44 @@ module.exports = (app) => {
     vm.submitEdit = function(){
       $http.put('/jobs/' + vm.selected._id, {job: vm.editJob, contact: vm.editCont})
       .then((res) => {
-        vm.selected = vm.jobs[vm.jobs.indexOf(vm.selected)] = res.data.job
-        vm.selected.contact[0] = vm.jobs[vm.jobs.indexOf(vm.selected)].contact[0] = res.data.contact
+        vm.selected = vm.activeJobs[vm.activeJobs.indexOf(vm.selected)] = res.data.job
+        vm.selected.contact[0] = vm.activeJobs[vm.activeJobs.indexOf(vm.selected)].contact[0] = res.data.contact
       })
     }
+
+    vm.setInt = function(int){
+      $http.put('/jobs/' + vm.selected._id, {job: {interest:int}})
+      .then((res) => {
+        vm.selected = vm.activeJobs[vm.activeJobs.indexOf(vm.selected)] = res.data.job
+        vm.selected.contact[0] = vm.activeJobs[vm.activeJobs.indexOf(vm.selected)].contact[0] = res.data.contact
+      })
+    }
+
+
+
+    //-------Events-----//
+    vm.addJobEvent = function(){
+      $http.post('/events/user/' + AuthService.getId(), {jobId: vm.selected._id, evt: vm.newEvent})
+      .then((res) => {
+        console.log(res.data)
+        vm.events.push(res.data.evt)
+        vm.newEvent = {};
+        vm.evShow = false;
+      })
+    }
+
+    vm.showEvent = function(evt){
+      vm.newEvent = {};
+      vm.newEvent.type = evt;
+      vm.evShow = true;
+    }
+
+    vm.cancelEvent = function(){
+      vm.evShow = false;
+      vm.newEvent = {};
+    }
+
+    //--get user info--//
 
     vm.getUser();
 
