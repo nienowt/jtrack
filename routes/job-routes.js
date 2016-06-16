@@ -60,7 +60,9 @@ module.exports = (router) => {
       if(err) res.send(err);
       Contact.findByIdAndUpdate(job.contact[0], req.body.contact, {new:true}, (err, contact) => {
         if(err) res.send(err);
-        res.send({job: job, contact: contact})
+        // res.send({job: job, contact: contact})
+        job.contact[0] = contact;
+        res.send(job)
       });
     });
   })

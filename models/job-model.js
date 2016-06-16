@@ -12,7 +12,7 @@ let jobSchema = mongoose.Schema({
   resumeUsed: String,
   foundThrough: String,
   appliedAt: String,
-  interest:String,
+  appStatus:String,
   events: [
     {
       type: mongoose.Schema.Types.ObjectId,

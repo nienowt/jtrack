@@ -3,16 +3,38 @@
 module.exports = (app) => {
   app.controller('MainController', ['$http','$location','$window','$mdConstant','AuthService','UserService', function($http,$location,$window,$mdConstant,AuthService,UserService){
     const vm = this;
-    vm.selected = null;
+    vm.selectedJob = null;
+    vm.selectedEvent = null;
+    vm.stagnantApps;
+    vm.showStagnant = false; //visibility of 'update stagnant apps bar'
     vm.responseShow = false; //visibility of 'manage application status'
     vm.evShow = false; //visibility of event form
     vm.activeJobs;
-    vm.events = [];
+    vm.activeEvents = [];
     vm.keys = [$mdConstant.KEY_CODE.ENTER, $mdConstant.KEY_CODE.COMMA];
     vm.editJob = {};
     vm.editCont = {};
     vm.newEvent;
 
+    //------get user information, apps/events etc--//
+    vm.getUser = function(){
+      UserService.getUser(AuthService.getId(), (err, res) => {
+        if(err) return vm.error = ErrorService(err);
+        console.log(res)
+        vm.user = res.data; // not sure this is used anywhere
+        vm.activeEvents = res.data.events;
+         //set active jobs
+        vm.activeJobs = res.data.jobs.filter((j) => {
+          return j.appStatus !== 'Inactive';
+        });
+        //get jobs more than a week old
+        vm.stagnantApps = vm.activeJobs.filter((j) => {
+          if(j.date) return (Math.floor(Date.now()/1000/60/60/24)) - (Math.floor(Date.parse(j.date)/1000/60/60/24)) > 7 && j.appStatus != 'Active';
+        })
+        vm.selectedJob = vm.activeJobs[vm.activeJobs.length-1]
+        vm.selectedEvent = vm.activeEvents[vm.activeEvents.length-1]
+      });
+    };
 
     //-----Jobs----// (maybe split into seperate controllers later)
     vm.resetJob = function(){
@@ -46,27 +68,15 @@ module.exports = (app) => {
         .then((res) => {
           console.log(res.data);
           vm.activeJobs.push(res.data.job);
-          vm.selected = vm.activeJobs[vm.activeJobs.length-1];
+          vm.selectedJob = vm.activeJobs[vm.activeJobs.length-1];
         })
         vm.job = vm.resetJob();
         vm.contact = vm.resetCont();
     }
 
-    vm.getUser = function(){
-      UserService.getUser(AuthService.getId(), (err, res) => {
-        if(err) return vm.error = ErrorService(err);
-        console.log(res)
-        vm.user = res.data; // not sure this is used anywhere
-        vm.events = res.data.events;
-        vm.activeJobs = res.data.jobs.filter((j) => {
-          return j.interest !== 'No';
-        });
-        vm.selected = vm.activeJobs[vm.activeJobs.length-1]
-      });
-    };
 
     vm.selectJob = function(job){
-      vm.selected = job;
+      vm.selectedJob = job;
       vm.responseShow = false;
     }
 
@@ -76,18 +86,40 @@ module.exports = (app) => {
     }
 
     vm.submitEdit = function(){
-      $http.put('/jobs/' + vm.selected._id, {job: vm.editJob, contact: vm.editCont})
+      $http.put('/jobs/' + vm.selectedJob._id, {job: vm.editJob, contact: vm.editCont})
       .then((res) => {
-        vm.selected = vm.activeJobs[vm.activeJobs.indexOf(vm.selected)] = res.data.job
-        vm.selected.contact[0] = vm.activeJobs[vm.activeJobs.indexOf(vm.selected)].contact[0] = res.data.contact
+        console.log(res.data)
+        vm.selectedJob = vm.activeJobs[vm.activeJobs.indexOf(vm.selectedJob)] = res.data;
       })
     }
 
     vm.setInt = function(int){
-      $http.put('/jobs/' + vm.selected._id, {job: {interest:int}})
+      $http.put('/jobs/' + vm.selectedJob._id, {job: {appStatus:int}})
       .then((res) => {
-        vm.selected = vm.activeJobs[vm.activeJobs.indexOf(vm.selected)] = res.data.job
-        vm.selected.contact[0] = vm.activeJobs[vm.activeJobs.indexOf(vm.selected)].contact[0] = res.data.contact
+        vm.selectedJob = vm.activeJobs[vm.activeJobs.indexOf(vm.selectedJob)] = res.data;
+        // vm.selectedJob.contact[0] = vm.activeJobs[vm.activeJobs.indexOf(vm.selectedJob)].contact[0] = res.data.contact
+      })
+    }
+
+    vm.manageStag = function(res){
+      if(res == 'y') return vm.showStagnant = true;
+      return vm.stagnantApps = [];
+    }
+
+    vm.handleStag = function(job, int){
+      $http.put('/jobs/' + job._id, {job: {appStatus: int}})
+      .then((res) => {
+        vm.stagnantApps = vm.stagnantApps.filter((j) => {
+          return j !== job;
+        })
+        if(int == 'Inactive') {
+          vm.activeJobs = vm.activeJobs.filter((j) => {
+            return j !== job;
+          })
+        } else {
+          vm.activeJobs[vm.activeJobs.indexOf(job)] = res.data
+        }
+        vm.selectedJob = vm.activeJobs[vm.activeJobs.length-1]
       })
     }
 
@@ -95,10 +127,10 @@ module.exports = (app) => {
 
     //-------Events-----//
     vm.addJobEvent = function(){
-      $http.post('/events/user/' + AuthService.getId(), {jobId: vm.selected._id, evt: vm.newEvent})
+      $http.post('/events/user/' + AuthService.getId(), {jobId: vm.selectedJob._id, evt: vm.newEvent})
       .then((res) => {
         console.log(res.data)
-        vm.events.push(res.data.evt)
+        vm.activeEvents.push(res.data.evt)
         vm.newEvent = {};
         vm.evShow = false;
       })
@@ -113,6 +145,10 @@ module.exports = (app) => {
     vm.cancelEvent = function(){
       vm.evShow = false;
       vm.newEvent = {};
+    }
+
+    vm.selectEvent = function(evt){
+      vm.selectedEvent = evt;
     }
 
     //--get user info--//
