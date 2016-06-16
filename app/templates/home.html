@@ -32,35 +32,37 @@
       <!-- Selected posting -->
       <md-content flex ng-show="!edit">
         <h3>Selected Job</h3>
-        <h4>{{mainCtrl.selectedJob.company}}</h4>
-        <p><a href="" ng-click="mainCtrl.responseShow = !mainCtrl.responseShow" ng-show="!mainCtrl.Selected.response">Manage Application Status</a></p> <!--add response section to job model -->
-        <p>Position: {{mainCtrl.selectedJob.position}}</p>
-        <p>Applied On: {{mainCtrl.selectedJob.date.substr(0,9)}}</p>
-        <p>Found On: {{mainCtrl.selectedJob.foundThrough}}</p>
-        <p>Applied At: {{mainCtrl.selectedJob.appliedAt}}</p>
+        <div id="selected-job">
+          <h4>{{mainCtrl.selectedJob.company}}</h4>
+          <p><a href="" ng-click="mainCtrl.responseShow = !mainCtrl.responseShow" ng-show="!mainCtrl.Selected.response">Manage Application Status</a></p> <!--add response section to job model -->
+          <p>Position: {{mainCtrl.selectedJob.position}}</p>
+          <p>Applied On: {{mainCtrl.selectedJob.date.substr(0,9)}}</p>
+          <p>Found On: {{mainCtrl.selectedJob.foundThrough}}</p>
+          <p>Applied At: {{mainCtrl.selectedJob.appliedAt}}</p>
 
 
-        <a href="" ng-click="showContact = !showContact">Show Contact Information</a>
-        <p><a href="" ng-click="edit = !edit">Edit</a></p>
+          <a href="" ng-click="showContact = !showContact">Show Contact Information</a>
+          <p><a href="" ng-click="edit = !edit">Edit</a></p>
 
-        <section id="contactInfo" ng-show="showContact">
-          <p>Contact</p>
-          <p>Name: {{mainCtrl.selectedJob.contact[0].name}}</p>
-          <p>Email: {{mainCtrl.selectedJob.contact[0].email}}</p>
-          <p>Phone: {{mainCtrl.selectedJob.contact[0].phone}}</p>
-        </section>
+          <section id="contactInfo" ng-show="showContact">
+            <p>Contact</p>
+            <p>Name: {{mainCtrl.selectedJob.contact[0].name}}</p>
+            <p>Email: {{mainCtrl.selectedJob.contact[0].email}}</p>
+            <p>Phone: {{mainCtrl.selectedJob.contact[0].phone}}</p>
+          </section>
 
-        <!--manage application status, add interview/offer details -->
-        <div id="responseInfo" ng-show="mainCtrl.responseShow">
-          <h5>Response Details</h5>
-          <div id="appRes">
-            <p>Application Status</p> <!--only show if selection not previously made -->
-            <button ng-click="mainCtrl.setInt('Active')">Active</button>
-            <button ng-click="mainCtrl.setInt('Inactive')">Inactive</button>
-          </div>
-          <div ng-show="mainCtrl.selectedJob.appStatus == 'Active'">
-            <button ng-click="mainCtrl.showEvent('Interview')">Add Interview Details</button>
-            <button ng-click="mainCtrl.showEvent('Offer')">Add Offer Details</button>
+          <!--manage application status, add interview/offer details -->
+          <div id="responseInfo" ng-show="mainCtrl.responseShow">
+            <h5>Response Details</h5>
+            <div id="appRes">
+              <p>Application Status</p> <!--only show if selection not previously made -->
+              <button ng-click="mainCtrl.setInt('Active')">Active</button>
+              <button ng-click="mainCtrl.setInt('Inactive')">Inactive</button>
+            </div>
+            <div ng-show="mainCtrl.selectedJob.appStatus == 'Active'">
+              <button ng-click="mainCtrl.showEvent('Interview')">Add Interview Details</button>
+              <button ng-click="mainCtrl.showEvent('Offer')">Add Offer Details</button>
+            </div>
           </div>
         </div>
       </md-content>
@@ -92,7 +94,7 @@
         <section id="main-events">
           <div id="event-list">
             <div id="event-list-item" ng-repeat="event in mainCtrl.activeEvents" ng-click="mainCtrl.selectEvent(event)">
-              {{event.name}}
+              {{event.name}} ({{event.type}})
             </div>
           </div>
         </section>
@@ -100,12 +102,25 @@
       </md-sidenav>
 
       <!--selected event-->
-      <md-content flex>
+      <md-content flex ng-show="!editEvt">
         <h3>Selected Event</h3>
         <h4>{{mainCtrl.selectedEvent.name}}</h4>
         <p>Event Date {{mainCtrl.selectedEvent.date}}</p>
         <p>Event Location {{mainCtrl.selectedEvent.location}}</p>
         <p>Details {{mainCtrl.selectedEvent.details}}</p>
+        <a href="" ng-click="editEvt=!editEvt">Edit</a>
+      </md-content>
+
+      <!--event-edit form-->
+      <md-content flex ng-show="editEvt">
+        <h3>{{mainCtrl.newEvent.type}}</h3>
+        <p>Name<input placeholder="{{mainCtrl.selectedEvent.name}}" ng-model="mainCtrl.editedEvent.name"></p>
+        <p ng-show="mainCtrl.selectedEvent.type != 'Offer'">Event Date<input placeholder="{{mainCtrl.selectedEvent.date}}" ng-model="mainCtrl.editedEvent.date" type="date"></p>
+        <p ng-show="mainCtrl.selectedEvent.type == 'Offer'">Deadline<input placeholder="{{mainCtrl.selectedEvent.date}}" ng-model="mainCtrl.editedEvent.date" type="date"></p>
+        <p ng-show="mainCtrl.selectedEvent.type != 'Offer'">Location<input placeholder="{{mainCtrl.selectedEvent.location}}" ng-model="mainCtrl.editedEvent.location" value=""></p>
+        <p>Details<textarea placeholder="{{mainCtrl.selectedEvent.details}}" ng-model="mainCtrl.editedEvent.details" rows="8" cols="40"></textarea>
+        <button ng-click="editEvt = !editEvt; mainCtrl.editEvent()">Submit</button>
+        <a href='' ng-click="editEvt = !editEvt; mainCtrl.cancelEventEdit()">Cancel</a>
       </md-content>
   </div>
 

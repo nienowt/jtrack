@@ -15,6 +15,7 @@ module.exports = (app) => {
     vm.editJob = {};
     vm.editCont = {};
     vm.newEvent;
+    vm.editedEvent = {};
 
     //------get user information, apps/events etc--//
     vm.getUser = function(){
@@ -90,6 +91,7 @@ module.exports = (app) => {
       .then((res) => {
         console.log(res.data)
         vm.selectedJob = vm.activeJobs[vm.activeJobs.indexOf(vm.selectedJob)] = res.data;
+        vm.cancelEdit(); //maybe change to 'clearEdit?'
       })
     }
 
@@ -149,6 +151,19 @@ module.exports = (app) => {
 
     vm.selectEvent = function(evt){
       vm.selectedEvent = evt;
+    }
+
+    vm.editEvent = function(){
+      $http.put('/events/' + vm.selectedEvent._id, vm.editedEvent)
+      .then((res) => {
+        console.log(res)
+        vm.selectedEvent = vm.activeEvents[vm.activeEvents.indexOf(vm.selectedEvent)] = res.data;
+        vm.editedEvent = {};
+      })
+    }
+
+    vm.cancelEventEdit = function(){
+      vm.editedEvent = {};
     }
 
     //--get user info--//

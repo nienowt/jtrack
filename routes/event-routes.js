@@ -28,4 +28,11 @@ module.exports = (router) => {
     });
   })
 
+  .put('/events/:id', (req, res) => {
+    Event.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, evt) => {
+      if (err) res.send(err);
+      res.send(evt)
+    })
+  })
+
 }
